@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Research Survey: AI in Stock Exchanges</title>
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --surface: #ffffff;
+      --background: #f8fafc;
+      --border: #e2e8f0;
+      --border-focus: #3b82f6;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent: #10b981;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem;
+    }
+
+    /* Container Constraints */
+    .survey-container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin: auto 0;
+    }
+
+    /* Header Styling */
+    .header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.35rem 0.85rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #93c5fd;
+      margin-bottom: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .header p {
+      color: #94a3b8;
+      font-size: 0.925rem;
+      max-width: 650px;
+    }
+
+    /* Progress Tracker */
+    .progress-bar-container {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-track {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 25%;
+      transition: width 0.35s ease;
+      border-radius: 10px;
+    }
+
+    /* Form Content */
+    form {
+      padding: 2rem;
+    }
+
+    .step-section {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .step-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-main);
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--primary-light);
+    }
+
+    .question-group {
+      margin-bottom: 1.75rem;
+    }
+
+    .question-label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      color: #1e293b;
+    }
+
+    .question-label .required {
+      color: #ef4444;
+      margin-left: 0.2rem;
+    }
+
+    /* Input Controls */
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background-color: var(--surface);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    /* Grid Options for Radio/Checkbox */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .options-grid.single-col {
+      grid-template-columns: 1fr;
+    }
+
+    .option-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      background: var(--surface);
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .option-card:hover {
+      background: var(--primary-light);
+      border-color: #bfdbfe;
+    }
+
+    .option-card input[type="radio"],
+    .option-card input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .option-card span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    /* Likert Rating Scale */
+    .likert-scale {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      background: #f1f5f9;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+    }
+
+    .likert-option {
+      flex: 1;
+      text-align: center;
+    }
+
+    .likert-option input {
+      display: none;
+    }
+
+    .likert-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.65rem 0.25rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .likert-option input:checked + label {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--shadow);
+    }
+
+    /* Navigation Buttons */
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Thank You / Success Card */
+    .success-card {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: #d1fae5;
+      color: var(--accent);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .success-card h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .success-card p {
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 1.5rem;
+    }
+
+    /* Mobile Responsive Adjustments */
+    @media (max-width: 640px) {
+      body {
+        padding: 0.5rem;
+      }
+
+      .header {
+        padding: 1.5rem 1.25rem 1.25rem;
+      }
+
+      .header h1 {
+        font-size: 1.35rem;
+      }
+
+      form {
+        padding: 1.25rem;
+      }
+
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .likert-scale {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .likert-option label {
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.65rem;
+      }
+
+      .button-group {
+        flex-direction: column-reverse;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="survey-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-badge">
+        <i data-lucide="line-chart" style="width:14px; height:14px;"></i> Academic Research Project
+      </div>
+      <h1>AI in Stock Exchange Trading & Operations</h1>
+      <p>Investigating the adoption, operational impact, risk parameters, and future outlook of Artificial Intelligence in capital markets.</p>
+    </header>
+
+    <!-- Progress Tracker -->
+    <div class="progress-bar-container">
+      <div class="progress-info">
+        <span id="step-indicator">Section 1 of 4</span>
+        <span id="percent-indicator">25% Completed</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Survey Form -->
+    <form id="survey-form" onsubmit="event.preventDefault();">
+
+      <!-- Section 1: Demographics -->
+      <div class="step-section active" id="section-1">
+        <h2 class="section-title"><i data-lucide="user-check"></i> Demographic & Professional Profile</h2>
+
+        <div class="question-group">
+          <label class="question-label" for="role">Primary Professional Role <span class="required">*</span></label>
+          <select id="role" name="role" required>
+            <option value="" disabled selected>Select your current role</option>
+            <option value="institutional_trader">Institutional / Equity Trader</option>
+            <option value="retail_trader">Retail Trader / Investor</option>
+            <option value="risk_manager">Compliance / Risk Manager</option>
+            <option value="fintech_developer">FinTech Developer / Quantitative Analyst</option>
+            <option value="exchange_operator">Exchange Operator / Regulator</option>
+            <option value="academic">Academic Researcher / Analyst</option>
+          </select>
+        </div>
+
+        <div class="question-group">
+          <label class="question-label">Market Experience Level <span class="required">*</span></label>
+          <div class="options-grid">
+            <label class="option-card">
+              <input type="radio" name="experience" value="0-2" required>
+              <span>Under 2 years</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="experience" value="2-5">
+              <span>2 – 5 years</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="experience" value="5-10">
+              <span>5 – 10 years</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="experience" value="10+">
+              <span>10+ years</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <label class="question-label" for="region">Primary Operating Region</label>
+          <select id="region" name="region">
+            <option value="" disabled selected>Select region</option>
+            <option value="north_america">North America</option>
+            <option value="europe">Europe</option>
+            <option value="asia_pacific">Asia-Pacific</option>
+            <option value="middle_east_africa">Latin America / Middle East / Africa</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section 2: Current AI Adoption -->
+      <div class="step-section" id="section-2">
+        <h2 class="section-title"><i data-lucide="cpu"></i> Current AI Adoption & Integration</h2>
+
+        <div class="question-group">
+          <label class="question-label">To what extent does your organization utilize AI/ML systems? <span class="required">*</span></label>
+          <div class="options-grid single-col">
+            <label class="option-card">
+              <input type="radio" name="ai_adoption" value="extensive" required>
+              <span>Core operational component (High Frequency Trading, Automated Market Making)</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="ai_adoption" value="moderate">
+              <span>Moderate usage (Decision support, predictive analytics, research)</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="ai_adoption" value="experimental">
+              <span>Experimental / Pilot testing stages</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="ai_adoption" value="none">
+              <span>No current AI integration</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <label class="question-label">Key AI Use Cases Employed (Select all that apply)</label>
+          <div class="options-grid">
+            <label class="option-card">
+              <input type="checkbox" name="usecase" value="algorithmic_trading">
+              <span>Algorithmic Execution</span>
+            </label>
+            <label class="option-card">
+              <input type="checkbox" name="usecase" value="sentiment_analysis">
+              <span>News Sentiment Analysis</span>
+            </label>
+            <label class="option-card">
+              <input type="checkbox" name="usecase" value="fraud_detection">
+              <span>Market Abuse & Fraud</span>
+            </label>
+            <label class="option-card">
+              <input type="checkbox" name="usecase" value="portfolio_rebalancing">
+              <span>Portfolio Management</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Market Impact & Risk Perception -->
+      <div class="step-section" id="section-3">
+        <h2 class="section-title"><i data-lucide="shield-alert"></i> Market Impact & Risk Perception</h2>
+
+        <div class="question-group">
+          <label class="question-label">AI algorithms increase systemic market volatility during stress events. <span class="required">*</span></label>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" id="l1" name="volatility_impact" value="1" required>
+              <label for="l1">Strongly Disagree</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" id="l2" name="volatility_impact" value="2">
+              <label for="l2">Disagree</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" id="l3" name="volatility_impact" value="3">
+              <label for="l3">Neutral</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" id="l4" name="volatility_impact" value="4">
+              <label for="l4">Agree</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" id="l5" name="volatility_impact" value="5">
+              <label for="l5">Strongly Agree</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <label class="question-label">What is the biggest risk posed by AI in stock markets?</label>
+          <div class="options-grid single-col">
+            <label class="option-card">
+              <input type="radio" name="primary_risk" value="black_box">
+              <span>"Black-box" opacity and lack of explainability</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="primary_risk" value="flash_crash">
+              <span>Cascading liquidation loops / Flash crashes</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="primary_risk" value="manipulation">
+              <span>Algorithmic manipulation & spoofing</span>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="primary_risk" value="regulatory">
+              <span>Lagging regulatory enforcement models</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Future Outlook -->
+      <div class="step-section" id="section-4">
+        <h2 class="section-title"><i data-lucide="trending-up"></i> Future Outlook & Qualitative Insights</h2>
+
+        <div class="question-group">
+          <label class="question-label" for="comments">What specific regulatory measures or safeguards should stock exchanges implement regarding autonomous trading algorithms?</label>
+          <textarea id="comments" name="comments" rows="4" placeholder="Share your insights or recommendations..."></textarea>
+        </div>
+
+        <div class="question-group">
+          <label class="question-label" for="email">Email Address (Optional – to receive study publication summary)</label>
+          <input type="email" id="email" name="email" placeholder="colleague@institution.edu">
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="button-group">
+        <button type="button" class="btn btn-secondary" id="prev-btn" onclick="moveStep(-1)" style="visibility: hidden;">
+          <i data-lucide="arrow-left" style="width:16px; height:16px;"></i> Previous
+        </button>
+        <button type="button" class="btn btn-primary" id="next-btn" onclick="moveStep(1)">
+          Next Step <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>
+        </button>
+      </div>
+    </form>
+
+    <!-- Success Confirmation -->
+    <div class="success-card" id="success-card">
+      <div class="success-icon">
+        <i data-lucide="check-circle" style="width:36px; height:36px;"></i>
+      </div>
+      <h2>Survey Submitted Successfully</h2>
+      <p>Thank you for contributing your expertise to our academic study on AI adoption in capital markets. Your responses have been recorded anonymously.</p>
+      <button class="btn btn-primary" onclick="location.reload()">Submit Another Response</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    function updateStepView() {
+      // Toggle Section Visibility
+      document.querySelectorAll('.step-section').forEach((sec, idx) => {
+        sec.classList.toggle('active', idx + 1 === currentStep);
+      });
+
+      // Update Progress Header
+      document.getElementById('step-indicator').innerText = `Section ${currentStep} of ${totalSteps}`;
+      const percentage = Math.round((currentStep / totalSteps) * 100);
+      document.getElementById('percent-indicator').innerText = `${percentage}% Completed`;
+      document.getElementById('progress-fill').style.width = `${percentage}%`;
+
+      // Button States
+      document.getElementById('prev-btn').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+      const nextBtn = document.getElementById('next-btn');
+      
+      if (currentStep === totalSteps) {
+        nextBtn.innerHTML = 'Submit Survey <i data-lucide="send" style="width:16px; height:16px;"></i>';
+      } else {
+        nextBtn.innerHTML = 'Next Step <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>';
+      }
+      lucide.createIcons();
+    }
+
+    function moveStep(direction) {
+      if (direction === 1 && !validateCurrentStep()) {
+        return;
+      }
+
+      currentStep += direction;
+
+      if (currentStep > totalSteps) {
+        submitSurvey();
+      } else {
+        updateStepView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function validateCurrentStep() {
+      const activeSection = document.getElementById(`section-${currentStep}`);
+      const requiredInputs = activeSection.querySelectorAll('[required]');
+      
+      for (let input of requiredInputs) {
+        if (input.type === 'radio') {
+          const name = input.name;
+          const checked = activeSection.querySelector(`input[name="${name}"]:checked`);
+          if (!checked) {
+            alert('Please answer all required questions before proceeding.');
+            return false;
+          }
+        } else if (!input.value.trim()) {
+          input.focus();
+          alert('Please fill out all required fields.');
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function submitSurvey() {
+      document.getElementById('survey-form').style.display = 'none';
+      document.querySelector('.progress-bar-container').style.display = 'none';
+      document.getElementById('success-card').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
